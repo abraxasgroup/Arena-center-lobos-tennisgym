@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arena Center Lobos | Centro Deportivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #8BC34A;
+    --verde-dark: #5d8a1e;
+    --negro: #0a0a0a;
+    --gris-dark: #111111;
+    --gris-mid: #1a1a1a;
+    --gris-card: #1e1e1e;
+    --gris-borde: #2a2a2a;
+    --blanco: #ffffff;
+    --blanco-80: rgba(255,255,255,0.8);
+    --blanco-50: rgba(255,255,255,0.5);
+    --blanco-20: rgba(255,255,255,0.15);
+    --acento: #d4f04a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--negro);
+    color: var(--blanco);
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--negro); }
+  ::-webkit-scrollbar-thumb { background: var(--verde); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 16px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--gris-borde);
+    padding: 12px 40px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 2px; color: var(--blanco);
+    text-decoration: none;
+  }
+  .nav-logo .dot { color: var(--verde); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: var(--blanco-80); text-decoration: none;
+    font-size: 13px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--verde); }
+  .nav-cta {
+    background: var(--verde); color: var(--negro);
+    padding: 10px 24px; border-radius: 6px;
+    font-size: 13px; font-weight: 700;
+    text-decoration: none; letter-spacing: 0.5px;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--acento); transform: translateY(-1px); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .nav-hamburger span { width: 24px; height: 2px; background: var(--blanco); border-radius: 2px; transition: all 0.3s; }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1920&q=85') center/cover no-repeat;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 50%, rgba(139,195,74,0.15) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; max-width: 900px; padding: 0 24px;
+  }
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--verde); color: var(--verde);
+    padding: 6px 20px; border-radius: 50px;
+    font-size: 11px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 12vw, 130px);
+    line-height: 0.9; letter-spacing: 4px;
+    margin-bottom: 24px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero-title .verde { color: var(--verde); display: block; }
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--blanco-80); font-weight: 300;
+    max-width: 600px; margin: 0 auto 40px;
+    line-height: 1.6;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .hero-buttons {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+  .btn-primary {
+    background: var(--verde); color: var(--negro);
+    padding: 16px 36px; border-radius: 8px;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    text-decoration: none; transition: all 0.3s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--acento); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(139,195,74,0.4); }
+  .btn-secondary {
+    background: transparent; color: var(--blanco);
+    padding: 16px 36px; border-radius: 8px;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none; transition: all 0.3s;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .btn-secondary:hover { border-color: var(--verde); color: var(--verde); }
+  .hero-stats {
+    position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 48px;
+    animation: fadeUp 1s ease 0.8s both;
+    z-index: 2;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px; color: var(--verde); line-height: 1;
+  }
+  .hero-stat .lbl {
+    font-size: 11px; color: var(--blanco-50);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 24px; right: 40px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--blanco-50); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; z-index: 2;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--verde));
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* SECTION BASE */
+  section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--verde);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; width: 30px; height: 1px;
+    background: var(--verde); display: block;
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1; letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .accent { color: var(--verde); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .about-text p {
+    color: var(--blanco-80); line-height: 1.8; font-size: 17px;
+    margin-bottom: 20px;
+  }
+  .about-features {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px;
+  }
+  .feat {
+    background: var(--gris-card);
+    border: 1px solid var(--gris-borde);
+    padding: 16px 20px; border-radius: 10px;
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color 0.3s;
+  }
+  .feat:hover { border-color: var(--verde); }
+  .feat-icon { font-size: 22px; }
+  .feat-text { font-size: 13px; font-weight: 600; color: var(--blanco-80); }
+  .about-image {
+    border-radius: 16px; overflow: hidden;
+    position: relative;
+  }
+  .about-image img { width: 100%; height: 480px; object-fit: cover; display: block; }
+  .about-image::after {
+    content: ''; position: absolute;
+    inset: 0; border-radius: 16px;
+    border: 1px solid var(--gris-borde);
+  }
+  .about-image .img-badge {
+    position: absolute; bottom: 24px; left: 24px;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+    border: 1px solid var(--verde); border-radius: 8px;
+    padding: 12px 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; color: var(--verde);
+  }
+  .about-image .img-badge span { display: block; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--blanco-50); font-weight: 400; letter-spacing: 1px; }
+
+  /* STATS BAND */
+  .stats-band {
+    background: var(--verde);
+    padding: 60px 40px; max-width: 100%;
+    margin: 0;
+  }
+  .stats-band-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center;
+  }
+  .stat-item .big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; color: var(--negro); line-height: 1;
+  }
+  .stat-item .desc { font-size: 13px; font-weight: 700; color: rgba(0,0,0,0.7); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* SERVICIOS */
+  .servicios-section { background: var(--gris-dark); max-width: 100%; padding: 100px 40px; }
+  .servicios-inner { max-width: 1200px; margin: 0 auto; }
+  .servicios-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px;
+  }
+  .servicio-card {
+    background: var(--gris-card);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px; overflow: hidden;
+    transition: all 0.4s ease; cursor: pointer;
+  }
+  .servicio-card:hover {
+    border-color: var(--verde);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(139,195,74,0.15);
+  }
+  .servicio-img { height: 200px; overflow: hidden; }
+  .servicio-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .servicio-card:hover .servicio-img img { transform: scale(1.05); }
+  .servicio-body { padding: 24px; }
+  .servicio-tag {
+    display: inline-block; background: rgba(139,195,74,0.15);
+    color: var(--verde); font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 50px; margin-bottom: 12px;
+  }
+  .servicio-body h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .servicio-body p { font-size: 14px; color: var(--blanco-50); line-height: 1.6; margin-bottom: 20px; }
+  .servicio-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; color: var(--verde);
+  }
+  .servicio-price span { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--blanco-50); }
+
+  /* TORNEOS */
+  .torneos-section { max-width: 100%; background: var(--negro); padding: 100px 40px; }
+  .torneos-inner { max-width: 1200px; margin: 0 auto; }
+  .torneos-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; align-items: start;
+  }
+  .torneo-feature {
+    background: linear-gradient(135deg, var(--gris-card), #1a2400);
+    border: 1px solid var(--gris-borde); border-radius: 20px;
+    overflow: hidden; padding: 40px;
+  }
+  .torneo-feature h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+    line-height: 1; margin-bottom: 16px; color: var(--verde);
+  }
+  .torneo-feature p { color: var(--blanco-80); line-height: 1.7; font-size: 15px; margin-bottom: 24px; }
+  .torneo-info-list { list-style: none; }
+  .torneo-info-list li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--gris-borde);
+    font-size: 14px; color: var(--blanco-80);
+  }
+  .torneo-info-list li:last-child { border-bottom: none; }
+  .torneo-info-list li .icon { font-size: 18px; }
+  .torneo-cards { display: flex; flex-direction: column; gap: 16px; }
+  .torneo-card {
+    background: var(--gris-card);
+    border: 1px solid var(--gris-borde); border-radius: 12px;
+    padding: 20px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: border-color 0.3s;
+  }
+  .torneo-card:hover { border-color: var(--verde); }
+  .torneo-card .cat { font-size: 13px; color: var(--blanco-50); margin-bottom: 4px; }
+  .torneo-card .nombre { font-weight: 700; font-size: 16px; }
+  .torneo-card .estado {
+    font-size: 11px; font-weight: 700; padding: 6px 14px;
+    border-radius: 50px; letter-spacing: 1px;
+  }
+  .estado-activo { background: rgba(139,195,74,0.2); color: var(--verde); }
+  .estado-proximo { background: rgba(255,193,7,0.15); color: #ffc107; }
+
+  /* GALERÍA */
+  .galeria-section { max-width: 100%; background: var(--gris-dark); padding: 100px 40px; }
+  .galeria-inner { max-width: 1200px; margin: 0 auto; }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 280px 280px;
+    gap: 12px; margin-top: 60px;
+  }
+  .galeria-item {
+    border-radius: 12px; overflow: hidden;
+    position: relative; cursor: pointer;
+  }
+  .galeria-item:first-child { grid-row: span 2; grid-column: span 1; }
+  .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .galeria-item:hover img { transform: scale(1.06); }
+  .galeria-item .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+    display: flex; align-items: flex-end; padding: 20px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .galeria-item:hover .overlay { opacity: 1; }
+  .overlay-text { font-size: 13px; font-weight: 600; color: var(--blanco); }
+
+  /* SISTEMA DE TURNOS */
+  .turnos-section { max-width: 100%; background: var(--negro); padding: 100px 40px; }
+  .turnos-inner { max-width: 1200px; margin: 0 auto; }
+  .turnos-intro {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: center; margin-bottom: 60px;
+  }
+  .turnos-text p { color: var(--blanco-80); font-size: 17px; line-height: 1.8; margin-bottom: 16px; }
+  .turnos-features {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .turno-feat {
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--gris-card); border: 1px solid var(--gris-borde);
+    border-radius: 12px; padding: 20px;
+    transition: border-color 0.3s;
+  }
+  .turno-feat:hover { border-color: var(--verde); }
+  .turno-feat .tf-icon {
+    font-size: 28px; min-width: 40px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .turno-feat h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .turno-feat p { font-size: 13px; color: var(--blanco-50); line-height: 1.5; }
+
+  /* BOOKING WIDGET */
+  .booking-widget {
+    background: var(--gris-card);
+    border: 1px solid var(--gris-borde);
+    border-radius: 20px; padding: 40px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .booking-steps {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-bottom: 40px;
+  }
+  .step-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; transition: all 0.3s;
+    border: 2px solid var(--gris-borde); color: var(--blanco-50);
+    cursor: pointer;
+  }
+  .step-dot.active { border-color: var(--verde); background: var(--verde); color: var(--negro); }
+  .step-dot.done { border-color: var(--verde); background: rgba(139,195,74,0.2); color: var(--verde); }
+  .step-line { width: 60px; height: 2px; background: var(--gris-borde); }
+  .step-line.done { background: var(--verde); }
+  .step-label {
+    font-size: 11px; color: var(--blanco-50); letter-spacing: 1px;
+    text-align: center; margin-top: 8px;
+  }
+  .booking-steps-labels {
+    display: flex; justify-content: center; gap: 0;
+    margin-bottom: 40px; margin-top: -32px;
+  }
+  .booking-panel { display: none; }
+  .booking-panel.active { display: block; }
+  .booking-panel h3 { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+
+  .cancha-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cancha-btn {
+    background: var(--gris-mid); border: 2px solid var(--gris-borde);
+    border-radius: 12px; padding: 20px 12px; text-align: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .cancha-btn:hover { border-color: var(--verde); }
+  .cancha-btn.selected { border-color: var(--verde); background: rgba(139,195,74,0.1); }
+  .cancha-btn .cn { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--verde); }
+  .cancha-btn .ct { font-size: 11px; color: var(--blanco-50); margin-top: 4px; }
+  .cancha-btn .cp { font-size: 13px; font-weight: 600; color: var(--blanco); margin-top: 8px; }
+
+  .fecha-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .fecha-nav button {
+    background: var(--gris-mid); border: 1px solid var(--gris-borde);
+    color: var(--blanco); padding: 8px 16px; border-radius: 6px;
+    cursor: pointer; font-size: 18px; transition: border-color 0.2s;
+  }
+  .fecha-nav button:hover { border-color: var(--verde); }
+  .fecha-nav .mes { font-weight: 700; font-size: 17px; }
+  .dias-semana {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 6px; margin-bottom: 20px;
+  }
+  .dia-header { text-align: center; font-size: 11px; color: var(--blanco-50); padding: 6px 0; font-weight: 600; }
+  .dia-btn {
+    background: transparent; border: 1px solid transparent;
+    border-radius: 8px; padding: 8px 4px; text-align: center;
+    cursor: pointer; color: var(--blanco); font-size: 14px;
+    transition: all 0.2s;
+  }
+  .dia-btn:hover:not(.vacio):not(.pasado) { border-color: var(--verde); color: var(--verde); }
+  .dia-btn.selected { background: var(--verde); color: var(--negro); font-weight: 700; border-color: var(--verde); }
+  .dia-btn.pasado { color: var(--blanco-20); cursor: default; }
+  .dia-btn.vacio { cursor: default; }
+  .dia-btn.hoy { border-color: rgba(139,195,74,0.4); }
+
+  .horarios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .hora-btn {
+    background: var(--gris-mid); border: 1px solid var(--gris-borde);
+    border-radius: 8px; padding: 12px 8px; text-align: center;
+    cursor: pointer; font-size: 14px; font-weight: 600; color: var(--blanco);
+    transition: all 0.2s;
+  }
+  .hora-btn:hover:not(.ocupado) { border-color: var(--verde); color: var(--verde); }
+  .hora-btn.selected { background: var(--verde); color: var(--negro); border-color: var(--verde); }
+  .hora-btn.ocupado { color: var(--blanco-20); cursor: not-allowed; text-decoration: line-through; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--blanco-80); margin-bottom: 8px; }
+  .form-group input, .form-group select {
+    width: 100%; background: var(--gris-mid);
+    border: 1px solid var(--gris-borde); border-radius: 8px;
+    padding: 14px 16px; color: var(--blanco); font-size: 15px;
+    outline: none; transition: border-color 0.3s;
+    font-family: 'Inter', sans-serif;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--verde); }
+  .form-group input::placeholder { color: var(--blanco-50); }
+  .form-group select option { background: var(--gris-dark); }
+
+  .booking-summary {
+    background: var(--gris-mid); border: 1px solid var(--gris-borde);
+    border-radius: 12px; padding: 24px; margin-bottom: 24px;
+  }
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--gris-borde);
+    font-size: 14px;
+  }
+  .summary-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .summary-row .label { color: var(--blanco-50); }
+  .summary-row .val { font-weight: 600; }
+  .summary-row.total .val { color: var(--verde); font-size: 22px; font-family: 'Bebas Neue', sans-serif; }
+
+  .booking-nav { display: flex; gap: 12px; margin-top: 24px; }
+  .btn-back {
+    background: transparent; border: 1px solid var(--gris-borde);
+    color: var(--blanco); padding: 14px 24px; border-radius: 8px;
+    cursor: pointer; font-size: 14px; font-weight: 600;
+    transition: all 0.3s;
+  }
+  .btn-back:hover { border-color: var(--blanco-50); }
+
+  /* ÉXITO */
+  .success-screen {
+    text-align: center; padding: 40px 0;
+  }
+  .success-icon { font-size: 80px; margin-bottom: 20px; }
+  .success-screen h3 { font-family: 'Bebas Neue', sans-serif; font-size: 48px; margin-bottom: 12px; color: var(--verde); }
+  .success-screen p { color: var(--blanco-80); font-size: 17px; line-height: 1.7; }
+  .success-code {
+    background: rgba(139,195,74,0.1); border: 1px solid var(--verde);
+    border-radius: 8px; padding: 16px 24px; display: inline-block;
+    font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--verde);
+    margin: 24px 0; letter-spacing: 4px;
+  }
+
+  /* TESTIMONIOS */
+  .testimonios-section { background: var(--gris-dark); max-width: 100%; padding: 100px 40px; }
+  .testimonios-inner { max-width: 1200px; margin: 0 auto; }
+  .testimonios-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px;
+  }
+  .testimonio {
+    background: var(--gris-card); border: 1px solid var(--gris-borde);
+    border-radius: 16px; padding: 28px;
+    transition: border-color 0.3s;
+  }
+  .testimonio:hover { border-color: var(--verde); }
+  .test-stars { color: var(--verde); font-size: 16px; margin-bottom: 16px; }
+  .test-text { font-size: 15px; color: var(--blanco-80); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+  .test-author { display: flex; align-items: center; gap: 12px; }
+  .test-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    object-fit: cover; border: 2px solid var(--verde);
+  }
+  .test-name { font-weight: 700; font-size: 14px; }
+  .test-role { font-size: 12px; color: var(--blanco-50); }
+
+  /* CONTACTO */
+  .contacto-section { max-width: 100%; background: var(--negro); padding: 100px 40px; }
+  .contacto-inner { max-width: 1200px; margin: 0 auto; }
+  .contacto-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; margin-top: 60px; }
+  .contacto-info h3 { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 24px;
+  }
+  .contact-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: rgba(139,195,74,0.1); border: 1px solid rgba(139,195,74,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .contact-text .ct-label { font-size: 11px; color: var(--blanco-50); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .contact-text .ct-val { font-size: 16px; font-weight: 600; }
+  .contact-text a { color: var(--blanco); text-decoration: none; transition: color 0.3s; }
+  .contact-text a:hover { color: var(--verde); }
+  .contacto-form .form-group { margin-bottom: 16px; }
+  .contacto-form textarea {
+    width: 100%; background: var(--gris-mid);
+    border: 1px solid var(--gris-borde); border-radius: 8px;
+    padding: 14px 16px; color: var(--blanco); font-size: 15px;
+    outline: none; transition: border-color 0.3s;
+    font-family: 'Inter', sans-serif; resize: vertical; min-height: 120px;
+  }
+  .contacto-form textarea:focus { border-color: var(--verde); }
+  .contacto-form textarea::placeholder { color: var(--blanco-50); }
+  .social-links { display: flex; gap: 12px; margin-top: 32px; }
+  .social-link {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--gris-card); border: 1px solid var(--gris-borde);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 20px; transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--verde); background: rgba(139,195,74,0.1); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--gris-dark);
+    border-top: 1px solid var(--gris-borde);
+    padding: 40px; text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 3px; margin-bottom: 12px;
+  }
+  footer p { font-size: 13px; color: var(--blanco-50); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    nav.scrolled { padding: 10px 20px; }
+    .nav-links, .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
+    section { padding: 60px 20px; }
+    .about-grid, .torneos-grid, .turnos-intro, .contacto-grid { grid-template-columns: 1fr; }
+    .servicios-grid { grid-template-columns: 1fr; }
+    .testimonios-grid { grid-template-columns: 1fr; }
+    .stats-band-inner { grid-template-columns: repeat(2, 1fr); }
+    .galeria-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .galeria-item:first-child { grid-row: span 1; }
+    .hero-stats { gap: 24px; }
+    .cancha-grid { grid-template-columns: repeat(2, 1fr); }
+    .horarios-grid { grid-template-columns: repeat(3, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .booking-widget { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">ARENA <span class="dot">CENTER</span></a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#torneos">Torneos</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#turnos" class="nav-cta">Reservar Cancha</a>
+  <div class="nav-hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-badge">📍 Lobos, Buenos Aires</span>
+    <h1 class="hero-title">
+      ARENA
+      <span class="verde">CENTER</span>
+      LOBOS
+    </h1>
+    <p class="hero-sub">
+      El corazón deportivo de Lobos. Tenis, Gym, Torneos y mucho más.
+      Donde la competencia se encuentra con la amistad.
+    </p>
+    <div class="hero-buttons">
+      <a href="#turnos" class="btn-primary">🎾 Reservar Cancha</a>
+      <a href="#nosotros" class="btn-secondary">Conocer el Club</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">4</div>
+      <div class="lbl">Canchas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">3.6K</div>
+      <div class="lbl">Socios</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">+15</div>
+      <div class="lbl">Años</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">100km</div>
+      <div class="lbl">De CABA</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">Quiénes somos</div>
+      <h2>MÁS QUE UN <span class="accent">CLUB</span></h2>
+      <p>
+        Arena Center Lobos es el centro deportivo de referencia en la Provincia de Buenos Aires.
+        Con 13.000 m² de lote y más de 500 m² cubiertos, combinamos deporte de alto nivel con
+        el calidez humana que nos hace únicos.
+      </p>
+      <p>
+        Somos parte de la red <strong style="color: var(--verde)">SportClub</strong>, que nos conecta
+        con una comunidad deportiva que crece semana a semana. Aquí no solo vas a entrenar —
+        vas a hacer amigos para toda la vida.
+      </p>
+      <div class="about-features">
+        <div class="feat"><span class="feat-icon">🎾</span><span class="feat-text">4 Canchas de Polvo de Ladrillo</span></div>
+        <div class="feat"><span class="feat-icon">💪</span><span class="feat-text">Gym de Alto Rendimiento</span></div>
+        <div class="feat"><span class="feat-icon">🏆</span><span class="feat-text">Torneos Oficiales</span></div>
+        <div class="feat"><span class="feat-icon">🧖</span><span class="feat-text">Sauna & Spa</span></div>
+        <div class="feat"><span class="feat-icon">🍽️</span><span class="feat-text">Salón Gastronómico</span></div>
+        <div class="feat"><span class="feat-icon">👨‍🏫</span><span class="feat-text">Academia y Escuela de Tenis</span></div>
+      </div>
+    </div>
+    <div class="about-image reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1617883861744-45d6f1f50e73?w=800&q=85" alt="Canchas Arena Center Lobos">
+      <div class="img-badge">
+        +15
+        <span>Años de historia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-band-inner">
+    <div class="stat-item reveal">
+      <div class="big" data-target="4">0</div>
+      <div class="desc">Canchas de Tenis</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="big" data-target="3600">0</div>
+      <div class="desc">Socios Activos</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="big" data-target="120">0</div>
+      <div class="desc">Eventos por Año</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="big" data-target="13000">0</div>
+      <div class="desc">m² de Instalaciones</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<div class="servicios-section">
+  <div class="servicios-inner">
+    <div class="section-label reveal">Nuestras Actividades</div>
+    <h2 class="reveal">TODO LO QUE <span class="accent">NECESITÁS</span></h2>
+    <div class="servicios-grid">
+      <div class="servicio-card reveal">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Tenis">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">⭐ Estrella</span>
+          <h3>Clases de Tenis</h3>
+          <p>Todos los niveles y edades. Entrenamiento personalizado con prof. Gonzalo Dinomo. Mejorá tu técnica, condición y confianza en la cancha.</p>
+          <div class="servicio-price">Consultá <span>/ precio por clase</span></div>
+        </div>
+      </div>
+      <div class="servicio-card reveal reveal-delay-1">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80" alt="Gimnasio">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">SportClub</span>
+          <h3>Gimnasio & Cardio</h3>
+          <p>Equipamiento top de la marca Cybex. Musculación, caminadores, bicicletas fijas y más. El mejor gym de Lobos, adherido a SportClub.</p>
+          <div class="servicio-price">Socio <span>/ mensual</span></div>
+        </div>
+      </div>
+      <div class="servicio-card reveal reveal-delay-2">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=600&q=80" alt="Sauna">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">Bienestar</span>
+          <h3>Sauna & Spa</h3>
+          <p>Espacio de descanso y recuperación para después del entrenamiento. Duchas y vestuarios de primera.</p>
+          <div class="servicio-price">Incluido <span>/ en socio</span></div>
+        </div>
+      </div>
+      <div class="servicio-card reveal">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80" alt="Alquiler Canchas">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">Popular</span>
+          <h3>Alquiler de Canchas</h3>
+          <p>4 canchas de polvo de ladrillo en perfectas condiciones. Reservás online y llegás a jugar. Simple y rápido.</p>
+          <div class="servicio-price">Reservá <span>/ por hora</span></div>
+        </div>
+      </div>
+      <div class="servicio-card reveal reveal-delay-1">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Gastronomía">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">Social</span>
+          <h3>Salón Gastronómico</h3>
+          <p>Cocina profesional con capacidad para más de 100 personas. Ideal para eventos deportivos, sociales y corporativos.</p>
+          <div class="servicio-price">Consultá <span>/ eventos</span></div>
+        </div>
+      </div>
+      <div class="servicio-card reveal reveal-delay-2">
+        <div class="servicio-img">
+          <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80" alt="Academia">
+        </div>
+        <div class="servicio-body">
+          <span class="servicio-tag">Formación</span>
+          <h3>Academia de Tenis</h3>
+          <p>Escuela para chicos y adultos. Grupos por nivel y edad. Torneos internos para poner en práctica lo aprendido.</p>
+          <div class="servicio-price">Consultá <span>/ cuota mensual</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TORNEOS -->
+<div class="torneos-section">
+  <div class="torneos-inner">
+    <div class="section-label reveal">Competencia</div>
+    <h2 class="reveal">LA ADRENALINA <span class="accent">DE LOS TORNEOS</span></h2>
+    <div class="torneos-grid">
+      <div class="torneo-feature reveal">
+        <h3>RANKING<br>ANUAL</h3>
+        <p>
+          Somos sede del Ranking Anual Lobos — uno de los torneos de tenis más importantes
+          de la región. Categorías para todos los niveles, con formato Americano y Eliminación Directa.
+          Competencia seria, pero con el mejor ambiente.
+        </p>
+        <ul class="torneo-info-list">
+          <li><span class="icon">🏅</span> Torneos Caballeros — Categorías 2da y 3ra</li>
+          <li><span class="icon">👗</span> Torneo Doble Mixto — Damas Libres</li>
+          <li><span class="icon">🗓️</span> Américano — Sábados desde las 13:30hs</li>
+          <li><span class="icon">🏆</span> Eliminación Directa para la final</li>
+          <li><span class="icon">🎉</span> Competencia + Buen Ambiente, siempre</li>
+          <li><span class="icon">🤝</span> Sponsor: Hernán Pissinis Inmobiliaria</li>
+        </ul>
+      </div>
+      <div class="torneo-cards reveal reveal-delay-1">
+        <div class="torneo-card">
+          <div>
+            <div class="cat">Torneo Actual</div>
+            <div class="nombre">Doble Mixto 2025</div>
+          </div>
+          <span class="estado estado-activo">EN CURSO</span>
+        </div>
+        <div class="torneo-card">
+          <div>
+            <div class="cat">Caballeros Singles</div>
+            <div class="nombre">Ranking Anual — 2da Categoría</div>
+          </div>
+          <span class="estado estado-activo">ACTIVO</span>
+        </div>
+        <div class="torneo-card">
+          <div>
+            <div class="cat">Caballeros Singles</div>
+            <div class="nombre">Ranking Anual — 3ra Categoría</div>
+          </div>
+          <span class="estado estado-activo">ACTIVO</span>
+        </div>
+        <div class="torneo-card">
+          <div>
+            <div class="cat">Próximo Torneo</div>
+            <div class="nombre">Clínica de Verano 2025/2026</div>
+          </div>
+          <span class="estado estado-proximo">PRÓXIMO</span>
+        </div>
+        <div class="torneo-card">
+          <div>
+            <div class="cat">Infantil / Juvenil</div>
+            <div class="nombre">Copa Academia Arena Center</div>
+          </div>
+          <span class="estado estado-proximo">POR CONFIRMAR</span>
+        </div>
+        <div style="text-align:center; padding: 20px 0;">
+          <a href="#contacto" class="btn-primary" style="display:inline-block; font-size:14px; padding:12px 28px;">
+            📩 Inscribirse al próximo torneo
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALERÍA -->
+<div class="galeria-section">
+  <div class="galeria-inner">
+    <div class="section-label reveal">La comunidad</div>
+    <h2 class="reveal">AMISTAD, <span class="accent">SALUD</span> Y TENIS</h2>
+    <p class="reveal" style="color: var(--blanco-80); font-size:17px; max-width:600px; line-height:1.7; margin-bottom:0;">
+      Más que un club — un lugar donde se forjan amistades de por vida. Cada partido, cada torneo, cada entrenamiento suma.
+    </p>
+    <div class="galeria-grid">
+      <div class="galeria-item reveal">
+        <img src="https://images.unsplash.com/photo-1560012057-4372e14c5085?w=800&q=80" alt="Tenis en Arena Center">
+        <div class="overlay"><span class="overlay-text">Canchas de polvo de ladrillo</span></div>
+      </div>
+      <div class="galeria-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1551958219-acbc595d7c73?w=600&q=80" alt="Amigos en el club">
+        <div class="overlay"><span class="overlay-text">Amistad y deporte</span></div>
+      </div>
+      <div class="galeria-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=600&q=80" alt="Torneo">
+        <div class="overlay"><span class="overlay-text">Torneos competitivos</span></div>
+      </div>
+      <div class="galeria-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&q=80" alt="Entrenamiento">
+        <div class="overlay"><span class="overlay-text">Entrenamiento profesional</span></div>
+      </div>
+      <div class="galeria-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" alt="Clases de tenis">
+        <div class="overlay"><span class="overlay-text">Clases para todos</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SISTEMA DE TURNOS -->
+<div class="turnos-section" id="turnos">
+  <div class="turnos-inner">
+    <div class="section-label reveal">Sistema Online</div>
+    <h2 class="reveal">RESERVÁ TU <span class="accent">CANCHA</span> EN SEGUNDOS</h2>
+    <div class="turnos-intro">
+      <div class="turnos-text reveal">
+        <p>
+          Nada de llamar, nada de esperar. Con nuestro sistema de turnos online vas a poder
+          reservar tu cancha favorita en menos de 2 minutos.
+        </p>
+        <p>
+          Elegís la cancha, el día y el horario — y listo. Recibís confirmación al instante.
+        </p>
+      </div>
+      <div class="turnos-features reveal reveal-delay-1">
+        <div class="turno-feat">
+          <div class="tf-icon">📱</div>
+          <div>
+            <h4>100% Online</h4>
+            <p>Reservás desde el celu, a cualquier hora, sin llamadas.</p>
+          </div>
+        </div>
+        <div class="turno-feat">
+          <div class="tf-icon">⚡</div>
+          <div>
+            <h4>Confirmación Instantánea</h4>
+            <p>Código de reserva al momento. Tu lugar asegurado.</p>
+          </div>
+        </div>
+        <div class="turno-feat">
+          <div class="tf-icon">🗓️</div>
+          <div>
+            <h4>Agenda la Semana</h4>
+            <p>Reservás con hasta 7 días de anticipación.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKING WIDGET -->
+    <div class="booking-widget reveal">
+      <!-- Steps -->
+      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:32px;">
+        <div class="booking-steps" id="stepsIndicator">
+          <div class="step-dot active" id="dot1">1</div>
+          <div class="step-line" id="line1"></div>
+          <div class="step-dot" id="dot2">2</div>
+          <div class="step-line" id="line2"></div>
+          <div class="step-dot" id="dot3">3</div>
+          <div class="step-line" id="line3"></div>
+          <div class="step-dot" id="dot4">4</div>
+        </div>
+        <div style="display:flex; gap:64px; margin-top:10px;">
+          <span style="font-size:10px;color:var(--blanco-50);letter-spacing:1px;">CANCHA</span>
+          <span style="font-size:10px;color:var(--blanco-50);letter-spacing:1px;">FECHA</span>
+          <span style="font-size:10px;color:var(--blanco-50);letter-spacing:1px;">HORARIO</span>
+          <span style="font-size:10px;color:var(--blanco-50);letter-spacing:1px;">CONFIRM.</span>
+        </div>
+      </div>
+
+      <!-- STEP 1: Cancha -->
+      <div class="booking-panel active" id="step1">
+        <h3>🎾 Elegí tu Cancha</h3>
+        <div class="cancha-grid">
+          <div class="cancha-btn" onclick="selectCancha(this, 'Cancha 1')">
+            <div class="cn">C1</div>
+            <div class="ct">Polvo de Ladrillo</div>
+            <div class="cp">Iluminada</div>
+          </div>
+          <div class="cancha-btn" onclick="selectCancha(this, 'Cancha 2')">
+            <div class="cn">C2</div>
+            <div class="ct">Polvo de Ladrillo</div>
+            <div class="cp">Iluminada</div>
+          </div>
+          <div class="cancha-btn" onclick="selectCancha(this, 'Cancha 3')">
+            <div class="cn">C3</div>
+            <div class="ct">Polvo de Ladrillo</div>
+            <div class="cp">🏆 Torneos</div>
+          </div>
+          <div class="cancha-btn" onclick="selectCancha(this, 'Cancha 4')">
+            <div class="cn">C4</div>
+            <div class="ct">Polvo de Ladrillo</div>
+            <div class="cp">Cubierta</div>
+          </div>
+        </div>
+        <div class="booking-nav">
+          <button class="btn-primary" onclick="goStep(2)" id="nextStep1" disabled style="opacity:0.5;cursor:not-allowed;">
+            Continuar →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Fecha -->
+      <div class="booking-panel" id="step2">
+        <h3>📅 Elegí el Día</h3>
+        <div class="fecha-nav">
+          <button onclick="prevMes()">‹</button>
+          <span class="mes" id="mesActual"></span>
+          <button onclick="nextMes()">›</button>
+        </div>
+        <div class="dias-semana" id="diasSemana"></div>
+        <div id="calGrid"></div>
+        <div class="booking-nav">
+          <button class="btn-back" onclick="goStep(1)">← Atrás</button>
+          <button class="btn-primary" onclick="goStep(3)" id="nextStep2" disabled style="opacity:0.5;cursor:not-allowed;">
+            Continuar →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Horario -->
+      <div class="booking-panel" id="step3">
+        <h3>⏰ Elegí el Horario</h3>
+        <p style="color:var(--blanco-50);font-size:13px;margin-bottom:20px;">Los horarios tachados ya están ocupados.</p>
+        <div class="horarios-grid" id="horariosGrid"></div>
+        <div class="booking-nav">
+          <button class="btn-back" onclick="goStep(2)">← Atrás</button>
+          <button class="btn-primary" onclick="goStep(4)" id="nextStep3" disabled style="opacity:0.5;cursor:not-allowed;">
+            Confirmar horario →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Datos + Resumen -->
+      <div class="booking-panel" id="step4">
+        <h3>✅ Confirmá tu Reserva</h3>
+        <div class="booking-summary" id="resumenReserva"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="inputNombre" placeholder="Ej: Juan García">
+          </div>
+          <div class="form-group">
+            <label>Teléfono / WhatsApp</label>
+            <input type="tel" id="inputTel" placeholder="+54 9 11...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="inputEmail" placeholder="email@ejemplo.com">
+        </div>
+        <div class="booking-nav">
+          <button class="btn-back" onclick="goStep(3)">← Atrás</button>
+          <button class="btn-primary" onclick="confirmarReserva()">🎾 Confirmar Reserva</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="booking-panel" id="stepSuccess">
+        <div class="success-screen">
+          <div class="success-icon">🎾</div>
+          <h3>¡RESERVA CONFIRMADA!</h3>
+          <p>Tu cancha está reservada. ¡Te esperamos en Arena Center!</p>
+          <div class="success-code" id="codigoReserva">ACL-0000</div>
+          <p style="font-size:14px;color:var(--blanco-50);">
+            Guardá este código — te lo pediremos al llegar.<br>
+            Tagliero 711, Lobos, Buenos Aires.
+          </p>
+          <br>
+          <button class="btn-primary" onclick="resetBooking()">Hacer otra reserva</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div class="testimonios-section">
+  <div class="testimonios-inner">
+    <div class="section-label reveal">Nuestra Comunidad</div>
+    <h2 class="reveal">LO QUE DICE <span class="accent">LA GENTE</span></h2>
+    <div class="testimonios-grid">
+      <div class="testimonio reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Las canchas están en perfectas condiciones. Vine de visita desde Buenos Aires para un torneo y me quedé asombrado con el nivel. Un club de tenis como pocos en la provincia."</p>
+        <div class="test-author">
+          <img class="test-avatar" src="https://ui-avatars.com/api/?name=Marcos+V&background=5d8a1e&color=fff&bold=true" alt="Marcos">
+          <div>
+            <div class="test-name">Marcos Vivas</div>
+            <div class="test-role">Jugador — Ranking Lobos</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio reveal reveal-delay-1">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"El gymn está bárbaro — lo mejor en aparatos en todo Lobos, sin dudas. Pero lo que más me gusta es el ambiente del club. Te hace bien entrenar acá."</p>
+        <div class="test-author">
+          <img class="test-avatar" src="https://ui-avatars.com/api/?name=Laura+M&background=5d8a1e&color=fff&bold=true" alt="Laura">
+          <div>
+            <div class="test-name">Laura Méndez</div>
+            <div class="test-role">Socia SportClub</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio reveal reveal-delay-2">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Mi hijo empezó con las clases de tenis acá y mejoró una barbaridad. Gonzalo Dinomo es un crack como profesor. Y los torneos internos son ideales para que los pibes compitan sano."</p>
+        <div class="test-author">
+          <img class="test-avatar" src="https://ui-avatars.com/api/?name=Daniel+R&background=5d8a1e&color=fff&bold=true" alt="Daniel">
+          <div>
+            <div class="test-name">Daniel Rodríguez</div>
+            <div class="test-role">Padre de alumno</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<div class="contacto-section" id="contacto">
+  <div class="contacto-inner">
+    <div class="section-label reveal">Estamos en Lobos</div>
+    <h2 class="reveal">CONTACTO <span class="accent">& UBICACIÓN</span></h2>
+    <div class="contacto-grid">
+      <div class="contacto-info reveal">
+        <h3>Venite a conocernos 👋</h3>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <div class="ct-label">Dirección</div>
+            <div class="ct-val">Tagliero 711, Lobos<br>Buenos Aires, Argentina</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div class="contact-text">
+            <div class="ct-label">WhatsApp</div>
+            <div class="ct-val"><a href="https://wa.me/541122334455">+54 11 2233-4455</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-text">
+            <div class="ct-label">Horario</div>
+            <div class="ct-val">Lun–Vie: 7:00 – 22:00<br>Sáb–Dom: 8:00 – 20:00</div>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="https://www.instagram.com/arenacenterlobos/" target="_blank" class="social-link" title="Instagram">📸</a>
+          <a href="https://www.facebook.com/arenacenterlobos/" target="_blank" class="social-link" title="Facebook">👍</a>
+          <a href="#" class="social-link" title="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="contacto-form reveal reveal-delay-1">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" placeholder="Tu nombre">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" placeholder="+54 9...">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="email@ejemplo.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿En qué puedo ayudarte?</label>
+          <textarea placeholder="Consulta sobre clases, turnos, membresías, eventos..."></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="alert('¡Gracias! Te contactamos pronto. 🎾')">
+          Enviar Consulta →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ARENA <span style="color:var(--verde)">CENTER</span> LOBOS</div>
+  <p>Tagliero 711, Lobos, Buenos Aires · Parte de la red <strong>SportClub</strong></p>
+  <p style="margin-top:8px; font-size:11px;">© 2025 Arena Center Lobos — Todos los derechos reservados</p>
+  <p style="margin-top:12px; font-size:11px; color:rgba(255,255,255,0.2)">
+    Demo desarrollada por <a href="https://digitaimotor.lat" style="color:rgba(139,195,74,0.4);text-decoration:none;">digitAI motor</a>
+  </p>
+</footer>
+
+<script>
+// NAV SCROLL
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// REVEAL OBSERVER
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Counter animation
+      const numEl = e.target.querySelector('[data-target]');
+      if (numEl) animateCounter(numEl);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// COUNTER
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 1800;
+  const start = performance.now();
+  function update(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target).toLocaleString('es-AR');
+    if (t < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// =====================
+// BOOKING SYSTEM
+// =====================
+const booking = { cancha: null, fecha: null, hora: null, mes: new Date().getMonth(), year: new Date().getFullYear() };
+const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const OCUPADOS = { '08:00': false, '09:00': true, '10:00': false, '11:00': true, '12:00': false, '14:00': false, '15:00': false, '16:00': true, '17:00': false, '18:00': false, '19:00': true, '20:00': false, '21:00': false };
+
+function goStep(n) {
+  [1,2,3,4,'Success'].forEach(s => {
+    const panel = document.getElementById('step' + s);
+    if (panel) panel.classList.remove('active');
+  });
+  document.getElementById('step' + n)?.classList.add('active');
+  updateStepDots(n);
+  if (n === 2) renderCalendar();
+  if (n === 3) renderHorarios();
+  if (n === 4) renderResumen();
+}
+
+function updateStepDots(current) {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    const line = document.getElementById('line' + i);
+    if (!dot) continue;
+    dot.classList.remove('active', 'done');
+    if (i < current) dot.classList.add('done');
+    else if (i === current) dot.classList.add('active');
+    if (line) line.classList.toggle('done', i < current);
+  }
+}
+
+function selectCancha(el, name) {
+  document.querySelectorAll('.cancha-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.cancha = name;
+  const btn = document.getElementById('nextStep1');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+
+function prevMes() { booking.mes--; if (booking.mes < 0) { booking.mes = 11; booking.year--; } renderCalendar(); }
+function nextMes() { booking.mes++; if (booking.mes > 11) { booking.mes = 0; booking.year++; } renderCalendar(); }
+
+function renderCalendar() {
+  document.getElementById('mesActual').textContent = MESES[booking.mes] + ' ' + booking.year;
+  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const header = document.getElementById('diasSemana');
+  header.innerHTML = days.map(d => `<div class="dia-header">${d}</div>`).join('');
+  const firstDay = new Date(booking.year, booking.mes, 1).getDay();
+  const daysInMonth = new Date(booking.year, booking.mes + 1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">';
+  for (let i = 0; i < firstDay; i++) html += '<div class="dia-btn vacio"></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(booking.year, booking.mes, d);
+    const isPast = date < today;
+    const isToday = date.getTime() === today.getTime();
+    const dateStr = `${booking.year}-${String(booking.mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isSelected = booking.fecha === dateStr;
+    const cls = ['dia-btn', isPast ? 'pasado' : '', isToday ? 'hoy' : '', isSelected ? 'selected' : ''].join(' ');
+    const onclick = isPast ? '' : `onclick="selectFecha('${dateStr}', this)"`;
+    html += `<div class="${cls}" ${onclick}>${d}</div>`;
+  }
+  html += '</div>';
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+function selectFecha(dateStr, el) {
+  document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.fecha = dateStr;
+  const btn = document.getElementById('nextStep2');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+
+function renderHorarios() {
+  const horas = ['08:00','09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+  document.getElementById('horariosGrid').innerHTML = horas.map(h => {
+    const ocupado = OCUPADOS[h];
+    const selected = booking.hora === h;
+    return `<div class="hora-btn ${ocupado ? 'ocupado' : ''} ${selected ? 'selected' : ''}" onclick="${!ocupado ? `selectHora('${h}', this)` : ''}">${h}hs</div>`;
+  }).join('');
+}
+
+function selectHora(h, el) {
+  document.querySelectorAll('.hora-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.hora = h;
+  const btn = document.getElementById('nextStep3');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+
+function renderResumen() {
+  const fechaObj = new Date(booking.fecha + 'T12:00:00');
+  const fechaStr = fechaObj.toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('resumenReserva').innerHTML = `
+    <div class="summary-row"><span class="label">Cancha</span><span class="val">${booking.cancha} — Polvo de Ladrillo</span></div>
+    <div class="summary-row"><span class="label">Fecha</span><span class="val">${fechaStr}</span></div>
+    <div class="summary-row"><span class="label">Horario</span><span class="val">${booking.hora}hs (1 hora)</span></div>
+    <div class="summary-row total"><span class="label" style="font-weight:700;">Total</span><span class="val">Pago en cancha</span></div>
+  `;
+}
+
+function confirmarReserva() {
+  const nombre = document.getElementById('inputNombre').value.trim();
+  const tel = document.getElementById('inputTel').value.trim();
+  if (!nombre || !tel) { alert('Por favor completá nombre y teléfono.'); return; }
+  const code = 'ACL-' + Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('codigoReserva').textContent = code;
+  document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('stepSuccess').classList.add('active');
+}
+
+function resetBooking() {
+  booking.cancha = null; booking.fecha = null; booking.hora = null;
+  document.getElementById('inputNombre').value = '';
+  document.getElementById('inputTel').value = '';
+  document.getElementById('inputEmail').value = '';
+  goStep(1);
+  document.querySelectorAll('.cancha-btn').forEach(b => b.classList.remove('selected'));
+  const btn1 = document.getElementById('nextStep1');
+  btn1.disabled = true; btn1.style.opacity = '0.5'; btn1.style.cursor = 'not-allowed';
+}
+
+// Init calendar
+renderCalendar();
+</script>
+</body>
+</html>
